@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AV Chowdary Dhaba Orders</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+:root{--bg:#fbf6ee;--card:#fff;--tx:#2a1d12;--mu:#7a6a5a;--ac:#c2410c;--ln:#e8dccb;--ok:#15803d;--wa:#b45309}
+@media(prefers-color-scheme:dark){:root{--bg:#1b1410;--card:#271d16;--tx:#f5ebdf;--mu:#b5a38f;--ac:#fb923c;--ln:#3d2f24;--ok:#4ade80;--wa:#fbbf24}}
+*{box-sizing:border-box}body{margin:0 auto;background:var(--bg);color:var(--tx);font:16px/1.4 system-ui,sans-serif;padding:14px 14px 110px;max-width:640px}
+h1{font-size:22px;margin:6px 0 2px}h2{font-size:15px;color:var(--mu);margin:18px 0 6px;text-transform:uppercase}
+.card{background:var(--card);border:1px solid var(--ln);border-radius:12px;padding:12px;margin:8px 0}.row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.mu{color:var(--mu);font-size:14px}button,.btn{font:inherit;border:0;border-radius:10px;padding:10px 14px;background:var(--ac);color:#fff;font-weight:600;cursor:pointer;text-decoration:none;display:inline-block}
+button.g{background:transparent;color:var(--tx);border:1px solid var(--ln)}button:disabled{opacity:.5}.q{display:flex;align-items:center;gap:10px}.q button{width:38px;padding:8px 0}.q b{min-width:18px;text-align:center}
+.bar{position:fixed;left:0;right:0;bottom:0;padding:12px 14px calc(12px + env(safe-area-inset-bottom,0px));background:var(--card);border-top:1px solid var(--ln)}.bar button{width:100%;max-width:612px;display:block;margin:0 auto;padding:14px;font-size:17px}
+.tag{font-size:12px;font-weight:700;padding:3px 8px;border-radius:99px;border:1px solid currentColor}.New{color:var(--ac)}.Cooking{color:var(--wa)}.Served{color:var(--ok)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.qr{text-align:center}.qr div{display:flex;justify-content:center;margin:8px 0;background:#fff;padding:8px;border-radius:8px}
+nav{display:flex;gap:12px;margin:6px 0 10px}nav a{font-size:14px;color:var(--ac)}input{font:inherit;width:70px;padding:8px;border-radius:8px;border:1px solid var(--ln);background:var(--card);color:var(--tx)}
+@media print{nav,.noprint{display:none}body{padding:0}}
+</style></head><body><div id="app"></div>
+<script>
+var app=document.getElementById("app"),MENU=[],cart={},qs="",busy=false,orders=[],lastNew=-1,actx=null;
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+function sum(it){return it.reduce(function(a,i){return a+i.p*i.q},0)}
+function tm(t){return new Date(t).toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"})}
+function pin(){var p=localStorage.getItem("pin");if(!p){p=prompt("Kitchen PIN");if(p)localStorage.setItem("pin",p)}return p||""}
+function api(u,m,b){return fetch(u,{method:m||"GET",headers:{"Content-Type":"application/json","x-pin":localStorage.getItem("pin")||""},body:b?JSON.stringify(b):undefined}).then(function(r){if(r.status===401){localStorage.removeItem("pin");throw new Error("pin")}if(!r.ok)throw new Error("err");return r.json()})}
+function route(){var h=location.hash.slice(1),m=h.match(/^table-(\d+)$/);return m?{v:"c",t:+m[1]}:{v:h||"home"}}
+function nav(){return '<nav class="noprint"><a href="#">Home</a><a href="#kitchen">Kitchen</a><a href="#qr">QR codes</a></nav>'}
+function beep(){try{actx=actx||new (window.AudioContext||window.webkitAudioContext)();var o=actx.createOscillator();o.connect(actx.destination);o.frequency.value=880;o.start();o.stop(actx.currentTime+.4)}catch(e){}}
+
+function refresh(){var r=route();
+ if(r.v==="c")return api("/api/orders?table="+r.t).then(function(o){orders=o;customer(r.t)}).catch(function(){});
+ if(r.v==="kitchen"){pin();return api("/api/kitchen").then(function(o){var n=o.filter(function(x){return x.status==="New"}).length;if(lastNew>=0&&n>lastNew)beep();lastNew=n;orders=o;kitchen()}).catch(function(e){if(e.message==="pin")refresh()})}
+ if(r.v==="qr")return qrs();home()}
+
+function home(){app.innerHTML='<h1>Dhaba Orders</h1><div class="card"><a class="btn" href="#kitchen">Kitchen screen</a></div><div class="card"><a class="btn" href="#qr">Print table QR codes</a></div>'}
+
+function customer(t){
+ var h='<h1>Table '+t+'</h1><div class="mu">AV Chowdary Family Dhaba &amp; Restaurant · tap + to add items</div><input id="s" type="search" placeholder="Search menu…" value="'+esc(qs)+'" style="width:100%;margin:10px 0 0;padding:12px">';
+ var lc="";MENU.forEach(function(m){if(qs&&m.name.toLowerCase().indexOf(qs.toLowerCase())<0)return;if(m.cat!==lc){lc=m.cat;h+='<h2>'+esc(lc)+'</h2>'}var q=cart[m.id]||0;h+='<div class="card row"><div><div>'+esc(m.name)+'</div><div class="mu">₹'+m.price+'</div></div><div class="q"><button class="g" data-d="-1" data-i="'+m.id+'">−</button><b>'+q+'</b><button data-d="1" data-i="'+m.id+'">+</button></div></div>'});
+ if(orders.length){var tot=0;h+='<h2>Your orders</h2>';orders.forEach(function(o){tot+=sum(o.items);h+='<div class="card"><div class="row"><span class="mu">'+tm(o.t)+'</span><span class="tag '+o.status+'">'+o.status+'</span></div>'+o.items.map(function(i){return esc(i.n)+' × '+i.q}).join('<br>')+'</div>'});h+='<div class="card row"><b>Table total</b><b>₹'+tot+'</b></div>'}
+ var n=0,s=0;MENU.forEach(function(m){var q=cart[m.id]||0;n+=q;s+=q*m.price});
+ h+='<div class="bar"><button id="place" '+(n&&!busy?'':'disabled')+'>'+(busy?'Sending…':(n?'Place Order · '+n+' items · ₹'+s:'Add items to order'))+'</button></div>';
+ var hadF=document.activeElement&&document.activeElement.id==="s";app.innerHTML=h;
+ var se=document.getElementById("s");se.oninput=function(){qs=se.value;customer(t)};if(hadF){se.focus();se.setSelectionRange(qs.length,qs.length)}
+ app.querySelectorAll("button[data-i]").forEach(function(b){b.onclick=function(){var i=+b.dataset.i;cart[i]=Math.max(0,(cart[i]||0)+ +b.dataset.d);customer(t)}});
+ var p=document.getElementById("place");if(p)p.onclick=function(){
+  if(busy)return;busy=true;customer(t);
+  var items=Object.keys(cart).filter(function(k){return cart[k]}).map(function(k){return{id:+k,q:cart[k]}});
+  api("/api/orders","POST",{table:t,items:items}).then(function(){cart={};busy=false;refresh()}).catch(function(){busy=false;alert("Could not send. Please try again.");customer(t)})}}
+
+function kitchen(){
+ var by={};orders.forEach(function(x){(by[x.table]=by[x.table]||[]).push(x)});
+ var ks=Object.keys(by).sort(function(a,b){return a-b}),nw=orders.filter(function(x){return x.status==="New"}).length;
+ var h=nav()+'<h1>Kitchen</h1><div class="mu">'+nw+' new · live</div>';
+ if(!ks.length)h+='<div class="card mu">No open orders.</div>';
+ ks.forEach(function(k){var tot=0;h+='<h2>Table '+k+'</h2>';
+  by[k].forEach(function(x){tot+=sum(x.items);var nx={New:"Start cooking",Cooking:"Mark served"}[x.status];
+   h+='<div class="card"><div class="row"><span class="mu">'+tm(x.t)+'</span><span class="tag '+x.status+'">'+x.status+'</span></div><div style="margin:6px 0">'+x.items.map(function(i){return '<b>'+i.q+'×</b> '+esc(i.n)}).join('<br>')+'</div>'+(nx?'<button data-s="'+x.id+'">'+nx+'</button>':'')+'</div>'});
+  h+='<div class="row"><b>Bill ₹'+tot+'</b><button class="g" data-c="'+k+'">Paid · close table</button></div>'});
+ app.innerHTML=h;
+ app.querySelectorAll("[data-s]").forEach(function(b){b.onclick=function(){api("/api/orders/"+b.dataset.s+"/next","POST").then(refresh)}});
+ app.querySelectorAll("[data-c]").forEach(function(b){b.onclick=function(){if(confirm("Close Table "+b.dataset.c+"?"))api("/api/tables/"+b.dataset.c+"/close","POST").then(refresh)}})}
+
+function qrs(){
+ var n=+localStorage.getItem("nt")||10,base=location.origin+"/";
+ app.innerHTML=nav()+'<h1>Table QR codes</h1><div class="noprint card row"><span>Number of tables</span><input type="number" id="nt" min="1" max="60" value="'+n+'"></div><button class="noprint" onclick="window.print()">Print</button><div class="grid" id="g" style="margin-top:12px"></div>';
+ var g=document.getElementById("g");
+ for(var i=1;i<=n;i++){var c=document.createElement("div");c.className="card qr";c.innerHTML="<b>Table "+i+"</b><div></div><span class='mu'>Scan to order</span>";g.appendChild(c);
+  try{new QRCode(c.querySelector("div"),{text:base+"#table-"+i,width:130,height:130})}catch(e){}}
+ document.getElementById("nt").onchange=function(e){localStorage.setItem("nt",Math.max(1,Math.min(60,+e.target.value||10)));qrs()}}
+
+window.addEventListener("hashchange",function(){orders=[];lastNew=-1;refresh()});
+fetch("/api/menu").then(function(r){return r.json()}).then(function(m){MENU=m;refresh()});
+try{var es=new EventSource("/api/events");es.onmessage=function(){if(!busy)refresh()}}catch(e){}
+setInterval(function(){if(!busy)refresh()},20000);
+</script></body></html>

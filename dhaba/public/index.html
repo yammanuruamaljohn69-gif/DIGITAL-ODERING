@@ -1,77 +1,135 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>AV Chowdary Dhaba Orders</title>
+<title>AV Chowdary Dhaba</title>
+<link rel="icon" href="/logo.png">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <style>
-:root{--bg:#fbf6ee;--card:#fff;--tx:#2a1d12;--mu:#7a6a5a;--ac:#c2410c;--ln:#e8dccb;--ok:#15803d;--wa:#b45309}
-@media(prefers-color-scheme:dark){:root{--bg:#1b1410;--card:#271d16;--tx:#f5ebdf;--mu:#b5a38f;--ac:#fb923c;--ln:#3d2f24;--ok:#4ade80;--wa:#fbbf24}}
-*{box-sizing:border-box}body{margin:0 auto;background:var(--bg);color:var(--tx);font:16px/1.4 system-ui,sans-serif;padding:14px 14px 110px;max-width:640px}
-h1{font-size:22px;margin:6px 0 2px}h2{font-size:15px;color:var(--mu);margin:18px 0 6px;text-transform:uppercase}
-.card{background:var(--card);border:1px solid var(--ln);border-radius:12px;padding:12px;margin:8px 0}.row{display:flex;align-items:center;justify-content:space-between;gap:10px}
-.mu{color:var(--mu);font-size:14px}button,.btn{font:inherit;border:0;border-radius:10px;padding:10px 14px;background:var(--ac);color:#fff;font-weight:600;cursor:pointer;text-decoration:none;display:inline-block}
-button.g{background:transparent;color:var(--tx);border:1px solid var(--ln)}button:disabled{opacity:.5}.q{display:flex;align-items:center;gap:10px}.q button{width:38px;padding:8px 0}.q b{min-width:18px;text-align:center}
-.bar{position:fixed;left:0;right:0;bottom:0;padding:12px 14px calc(12px + env(safe-area-inset-bottom,0px));background:var(--card);border-top:1px solid var(--ln)}.bar button{width:100%;max-width:612px;display:block;margin:0 auto;padding:14px;font-size:17px}
-.tag{font-size:12px;font-weight:700;padding:3px 8px;border-radius:99px;border:1px solid currentColor}.New{color:var(--ac)}.Cooking{color:var(--wa)}.Served{color:var(--ok)}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.qr{text-align:center}.qr div{display:flex;justify-content:center;margin:8px 0;background:#fff;padding:8px;border-radius:8px}
-nav{display:flex;gap:12px;margin:6px 0 10px}nav a{font-size:14px;color:var(--ac)}input{font:inherit;width:70px;padding:8px;border-radius:8px;border:1px solid var(--ln);background:var(--card);color:var(--tx)}
+:root{--bg:#fff7ea;--card:#fff;--tx:#2b1a10;--mu:#6f5c4b;--ac:#d9480f;--ln:#f0dcc0;--g:linear-gradient(135deg,#ff9f1c,#e8590c 55%,#c92a2a);--ok:#2b8a3e;--wa:#b45309;--nw:#c92a2a}
+@media(prefers-color-scheme:dark){:root{--bg:#1c130d;--card:#2a1d14;--tx:#fbefe0;--mu:#c3ae98;--ac:#ffa94d;--ln:#4a3524;--ok:#69db7c;--wa:#ffd43b;--nw:#ff8787}}
+*{box-sizing:border-box}body{margin:0 auto;background:var(--bg);color:var(--tx);font:16px/1.4 system-ui,sans-serif;padding:0 14px 110px;max-width:680px}
+.hd{background:var(--g);color:#fff;margin:0 -14px;padding:18px 16px 16px;border-radius:0 0 22px 22px;box-shadow:0 6px 18px #c9540033}.hd{display:flex;align-items:center;gap:14px}.hd h1{margin:0;font-size:22px}.lg{width:64px;height:64px;flex:none;border-radius:50%;background:#fff;padding:3px;box-shadow:0 2px 8px #0003;object-fit:contain}.qr .lg{width:44px;height:44px;box-shadow:none}.hd .s{opacity:.92;font-size:14px}
+h2{font-size:15px;color:var(--mu);margin:18px 0 6px;text-transform:uppercase}.mu{color:var(--mu);font-size:14px}
+.card{background:var(--card);border:1px solid var(--ln);border-radius:16px;padding:12px;margin:10px 0;animation:fi .35s both}.row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+button,.btn{font:inherit;border:0;border-radius:12px;padding:10px 14px;background:var(--g);color:#fff;font-weight:700;cursor:pointer;text-decoration:none;display:inline-block;transition:transform .12s}button:active,.btn:active{transform:scale(.93)}
+button.g{background:transparent;color:var(--tx);border:1px solid var(--ln)}button:disabled{opacity:.5}
+input,select{font:inherit;padding:9px;border-radius:10px;border:1px solid var(--ln);background:var(--card);color:var(--tx);max-width:100%}
+.tabs{position:sticky;top:0;z-index:5;display:flex;gap:8px;overflow-x:auto;padding:10px 0;background:var(--bg);scrollbar-width:none}.tabs button{flex:none;background:var(--card);color:var(--tx);border:1px solid var(--ln);padding:8px 13px;border-radius:99px}.tabs button.on{background:var(--g);color:#fff;border-color:transparent}
+.it{display:flex;align-items:center;gap:12px}.im{width:64px;height:64px;flex:none;border-radius:14px;background:linear-gradient(135deg,#ffe8cc,#ffc078);display:grid;place-items:center;font-size:30px;overflow:hidden}.im img{width:100%;height:100%;object-fit:cover}.inf{flex:1;min-width:0}.pr{font-weight:800;color:var(--ac)}
+.vd{display:inline-block;width:12px;height:12px;border:2px solid #2b8a3e;border-radius:3px;position:relative;margin-right:6px;vertical-align:-1px}.vd:after{content:"";position:absolute;inset:2px;border-radius:50%;background:#2b8a3e}.vd.nv{border-color:#c92a2a}.vd.nv:after{background:#c92a2a}
+.q{display:flex;align-items:center;gap:8px}.q button{padding:8px 12px}.q b{min-width:18px;text-align:center}.out{color:var(--nw);font-weight:700;font-size:13px}.it.so{opacity:.55}
+.sk{height:84px;border-radius:16px;margin:10px 0;background:linear-gradient(90deg,var(--ln),var(--card),var(--ln));background-size:200% 100%;animation:sh 1.2s infinite}
+#vc{position:fixed;left:14px;right:14px;bottom:calc(14px + env(safe-area-inset-bottom,0px));max-width:652px;margin:0 auto;padding:15px;font-size:17px;box-shadow:0 8px 22px #c9540055;display:flex;justify-content:space-between;align-items:center}
+.bd{background:#fff;color:var(--nw);border-radius:99px;padding:1px 9px;margin-right:8px;font-weight:800}.bd.bump{animation:bp .4s}
+#ov{position:fixed;inset:0;background:#0007;opacity:0;pointer-events:none;transition:opacity .25s;z-index:20}#ov.on{opacity:1;pointer-events:auto}
+#cp{position:fixed;left:0;right:0;bottom:0;max-width:680px;margin:0 auto;background:var(--bg);border-radius:24px 24px 0 0;padding:16px 16px calc(16px + env(safe-area-inset-bottom,0px));max-height:80vh;overflow:auto;transform:translateY(105%);transition:transform .3s cubic-bezier(.2,.8,.2,1);z-index:21}#cp.on{transform:none}
+.pg{height:7px;border-radius:9px;background:var(--ln);overflow:hidden;margin-top:8px}.pg i{display:block;height:100%;border-radius:9px;transition:width .5s,background .5s}
+.tag{font-size:12px;font-weight:700;padding:3px 9px;border-radius:99px;border:1px solid currentColor}.New{color:var(--nw)}.Cooking{color:var(--wa)}.Served{color:var(--ok)}
+.in{animation:sl .45s both}.flash{animation:sl .45s both,fl 1.6s}.chip{color:#fff;font-size:12px;font-weight:700;padding:3px 9px;border-radius:99px}
+nav{display:flex;gap:14px;margin:12px 0}nav a{color:var(--ac);font-size:14px;font-weight:600}.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.qr{text-align:center}.qr div{display:flex;justify-content:center;margin:8px 0;background:#fff;padding:8px;border-radius:8px}
+.ad input[type=text],.ad input[type=number]{width:100%}.ad .card{display:grid;gap:6px}.ad .r{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.ad .r input[type=number]{width:90px}.ad table{width:100%;border-collapse:collapse;font-size:14px}.ad td{padding:3px 6px;border-bottom:1px solid var(--ln)}
+@keyframes fi{from{opacity:0;transform:translateY(8px)}}@keyframes sl{from{opacity:0;transform:translateX(-30px)}}@keyframes fl{0%,60%{box-shadow:0 0 0 4px #ffd43b}}@keyframes bp{50%{transform:scale(1.5)}}@keyframes sh{to{background-position:-200% 0}}
+@media(prefers-reduced-motion:reduce){*,*:before{animation:none!important;transition:none!important}}
 @media print{nav,.noprint{display:none}body{padding:0}}
 </style></head><body><div id="app"></div>
 <script>
-var app=document.getElementById("app"),MENU=[],cart={},qs="",busy=false,orders=[],lastNew=-1,actx=null;
-function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+var app=document.getElementById("app"),$=function(s,e){return(e||document).querySelector(s)},D={cats:[],items:[],tmap:{}},cart={},cat="All",qs="",orders=[],busy=false,lastNew=-1,actx=null,T=0,AD=null,CC=false;
+function esc(s){return String(s).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
 function sum(it){return it.reduce(function(a,i){return a+i.p*i.q},0)}
 function tm(t){return new Date(t).toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"})}
-function pin(){var p=localStorage.getItem("pin");if(!p){p=prompt("Kitchen PIN");if(p)localStorage.setItem("pin",p)}return p||""}
-function api(u,m,b){return fetch(u,{method:m||"GET",headers:{"Content-Type":"application/json","x-pin":localStorage.getItem("pin")||""},body:b?JSON.stringify(b):undefined}).then(function(r){if(r.status===401){localStorage.removeItem("pin");throw new Error("pin")}if(!r.ok)throw new Error("err");return r.json()})}
-function route(){var h=location.hash.slice(1),m=h.match(/^table-(\d+)$/);return m?{v:"c",t:+m[1]}:{v:h||"home"}}
-function nav(){return '<nav class="noprint"><a href="#">Home</a><a href="#kitchen">Kitchen</a><a href="#qr">QR codes</a></nav>'}
+function icon(c){c=c.toLowerCase();var m=[[/water|drink|soft/,"🥤"],[/chicken/,"🍗"],[/mutton|lamb/,"🍖"],[/egg/,"🥚"],[/fish|prawn|sea/,"🐟"],[/biryani|rice/,"🍛"],[/roti|naan|bread/,"🫓"],[/soup/,"🍲"],[/veg|paneer/,"🥗"],[/sweet|dessert/,"🍨"]];for(var i=0;i<m.length;i++)if(m[i][0].test(c))return m[i][1];return"🍽️"}
+function hue(n){var h=0;for(var i=0;i<n.length;i++)h=(h*31+n.charCodeAt(i))%360;return"hsl("+h+" 65% 38%)"}
+function api(u,m,b,k){k=k||"pin";return fetch(u,{method:m||"GET",headers:{"Content-Type":"application/json","x-pin":localStorage.getItem(k)||""},body:b?JSON.stringify(b):undefined}).then(function(r){if(r.status===401){localStorage.removeItem(k);throw new Error("pin")}return r.json().then(function(j){if(!r.ok){var e=new Error(j.error||"err");e.d=j;throw e}return j})})}
+function ask(k,l){if(!localStorage.getItem(k)){var p=prompt(l);if(p)localStorage.setItem(k,p)}}
 function beep(){try{actx=actx||new (window.AudioContext||window.webkitAudioContext)();var o=actx.createOscillator();o.connect(actx.destination);o.frequency.value=880;o.start();o.stop(actx.currentTime+.4)}catch(e){}}
+function nav(){return '<nav class="noprint"><a href="#">Home</a><a href="#kitchen">Kitchen</a><a href="#qr">QR codes</a><a href="#admin">Admin</a></nav>'}
+function route(){var h=location.hash.slice(1),m=h.match(/^table-(\d+)$/);return m?{v:"c",t:+m[1]}:{v:h||"home"}}
+function loadMenu(){return fetch("/api/menu").then(function(r){return r.json()}).then(function(d){D=d;return d})}
 
 function refresh(){var r=route();
- if(r.v==="c")return api("/api/orders?table="+r.t).then(function(o){orders=o;customer(r.t)}).catch(function(){});
- if(r.v==="kitchen"){pin();return api("/api/kitchen").then(function(o){var n=o.filter(function(x){return x.status==="New"}).length;if(lastNew>=0&&n>lastNew)beep();lastNew=n;orders=o;kitchen()}).catch(function(e){if(e.message==="pin")refresh()})}
- if(r.v==="qr")return qrs();home()}
+ if(r.v==="c")return Promise.all([api("/api/orders?table="+r.t),loadMenu()]).then(function(a){orders=a[0];cview(r.t)}).catch(function(){});
+ if(r.v==="kitchen"){ask("pin","Kitchen PIN");return api("/api/kitchen").then(function(o){var n=o.filter(function(x){return x.status==="New"}).length;if(lastNew>=0&&n>lastNew)beep();lastNew=n;orders=o;kview()}).catch(function(e){if(e.message==="pin")refresh()})}
+ if(r.v==="qr")return qrs();if(r.v==="admin")return admin();home()}
+function home(){app.innerHTML='<div class="hd"><img class="lg" src="/logo.png" alt="AV Chowdary logo"><div><h1>AV Chowdary Dhaba</h1><div class="s">Family Dhaba &amp; Restaurant · Live table ordering</div></div></div>'+nav()+'<div class="card"><a class="btn" href="#kitchen">Kitchen screen</a></div><div class="card"><a class="btn" href="#qr">Print table QR codes</a></div><div class="card"><a class="btn" href="#admin">Admin panel</a></div>'}
 
-function home(){app.innerHTML='<h1>Dhaba Orders</h1><div class="card"><a class="btn" href="#kitchen">Kitchen screen</a></div><div class="card"><a class="btn" href="#qr">Print table QR codes</a></div>'}
+/* ---------- customer ---------- */
+function qrow(i){var q=cart[i.id]||0;if(i.out)return'<span class="out">Out of stock</span>';return q?'<div class="q"><button class="g" data-a="-1" data-i="'+i.id+'">−</button><b>'+q+'</b><button data-a="1" data-i="'+i.id+'">+</button></div>':'<button data-a="1" data-i="'+i.id+'">Add</button>'}
+function card(i){var e=document.createElement("div");e.className="card it"+(i.out?" so":"");e.id="i"+i.id;e.dataset.k=JSON.stringify([i.name,i.price,i.veg,i.out,i.img,i.cat]);e.dataset.c=i.cat;e.dataset.n=i.name.toLowerCase();
+ e.innerHTML='<div class="im">'+(i.img?'<img loading="lazy" alt="" src="/img/'+i.id+'?v='+i.img+'">':icon(i.cat))+'</div><div class="inf"><div><i class="vd'+(i.veg?"":" nv")+'"></i>'+esc(i.name)+'</div><div class="mu">'+icon(i.cat)+' '+esc(i.cat)+'</div><div class="pr">₹'+i.price+'</div></div><div class="q" id="q'+i.id+'">'+qrow(i)+'</div>';return e}
+function fit(){var any=false;document.querySelectorAll("#ml .it").forEach(function(e){var s=(cat==="All"||e.dataset.c===cat)&&(!qs||e.dataset.n.indexOf(qs)>=0);e.hidden=!s;if(s)any=true});$("#nf").hidden=any}
+function cbar(){var n=0,s=0;D.items.forEach(function(i){var q=cart[i.id]||0;if(q&&!i.out){n+=q;s+=q*i.price}});var b=$("#bd"),old=b.textContent;b.textContent=n;if(old!=n){b.classList.remove("bump");void b.offsetWidth;b.classList.add("bump")}
+ $("#vt").textContent="₹"+s;$("#vc").hidden=!n;return{n:n,s:s}}
+function cpanel(){var h="",t=0;D.items.forEach(function(i){var q=cart[i.id];if(!q)return;t+=q*i.price;h+='<div class="card row"><div><div>'+esc(i.name)+(i.out?' <span class="out">Out of stock</span>':"")+'</div><div class="mu">₹'+i.price+' each</div></div><div class="q"><button class="g" data-a="-1" data-i="'+i.id+'">−</button><b>'+q+'</b><button data-a="1" data-i="'+i.id+'">+</button><b>₹'+q*i.price+'</b><button class="g" data-a="-99" data-i="'+i.id+'" aria-label="Remove">✕</button></div></div>'});
+ $("#cl").innerHTML=h||'<div class="mu">Your Cart is empty.</div>';$("#ct").textContent="₹"+t;$("#po").disabled=!t||busy;$("#po").textContent=busy?"Sending…":"Place Order"}
+function openC(o){$("#cp").classList.toggle("on",o);$("#ov").classList.toggle("on",o);if(o)cpanel()}
+function cview(t){
+ if(!$("#ml")||T!==t){T=t;cart={};cat="All";qs="";app.innerHTML='<div class="hd"><img class="lg" src="/logo.png" alt="AV Chowdary logo"><div><h1>Table '+t+'</h1><div class="s">AV Chowdary Family Dhaba &amp; Restaurant</div><div class="s" id="wt"></div></div></div><input id="s" type="search" placeholder="🔍 Search menu…" style="width:100%;margin:12px 0 0;padding:12px"><div class="tabs" id="tb"></div><div id="ml"><div class="sk"></div><div class="sk"></div><div class="sk"></div></div><div class="mu" id="nf" hidden>No items found.</div><div id="mo"></div><button id="vc" hidden><span>🛒 View Cart</span><span><span class="bd" id="bd">0</span><b id="vt"></b></span></button><div id="ov"></div><div id="cp"><div class="row"><h2 style="margin:0">Cart</h2><button class="g" id="cx">Close</button></div><div id="cl"></div><div class="row" style="margin:10px 0"><b>Total</b><b id="ct"></b></div><button id="po" style="width:100%;padding:14px">Place Order</button></div>';
+  $("#s").oninput=function(e){qs=e.target.value.toLowerCase();fit()};$("#vc").onclick=function(){openC(true)};$("#ov").onclick=$("#cx").onclick=function(){openC(false)};
+  $("#tb").onclick=function(e){var b=e.target.closest("button");if(!b)return;cat=b.dataset.t;document.querySelectorAll("#tb button").forEach(function(x){x.classList.toggle("on",x===b)});fit()};
+  var tap=function(e){var b=e.target.closest("[data-a]");if(!b)return;var i=+b.dataset.i,a=+b.dataset.a;cart[i]=a===-99?0:Math.max(0,(cart[i]||0)+a);var it=D.items.find(function(x){return x.id===i}),q=$("#q"+i);if(q&&it)q.innerHTML=qrow(it);cbar();if($("#cp").classList.contains("on"))cpanel()};
+  $("#ml").onclick=tap;$("#cl").onclick=tap;
+  $("#po").onclick=function(){if(busy)return;busy=true;cpanel();var items=Object.keys(cart).filter(function(k){return cart[k]}).map(function(k){return{id:+k,q:cart[k]}});
+   api("/api/orders","POST",{table:t,items:items}).then(function(){cart={};busy=false;openC(false);document.querySelectorAll("#ml .it").forEach(function(e){var i=D.items.find(function(x){return"i"+x.id===e.id});if(i)$("#q"+i.id).innerHTML=qrow(i)});cbar();refresh()}).catch(function(e){busy=false;if(e.d&&e.d.id)delete cart[e.d.id];alert(e.d&&e.d.error==="out"?e.d.name+" is out of stock. Removed from your Cart.":e.d&&e.d.error==="slow down"?"Too many orders, please wait a minute.":"Could not send. Please try again.");refresh().then(cpanel)})}}
+ $("#wt").textContent=D.tmap[t]?"Your waiter: "+D.tmap[t]:"";
+ var cats=["All"].concat(D.cats.filter(function(c){return D.items.some(function(i){return i.cat===c})})),tb=$("#tb");
+ if(tb.dataset.k!==cats.join("|")){tb.dataset.k=cats.join("|");tb.innerHTML=cats.map(function(c){return'<button data-t="'+esc(c)+'" class="'+(c===cat?"on":"")+'">'+(c==="All"?"🍽️ ":icon(c)+" ")+esc(c)+'</button>'}).join("")}
+ var ml=$("#ml");if(ml.querySelector(".sk"))ml.innerHTML="";var ids={};
+ D.items.forEach(function(i,n){ids[i.id]=1;var e=document.getElementById("i"+i.id),k=JSON.stringify([i.name,i.price,i.veg,i.out,i.img,i.cat]);if(!e||e.dataset.k!==k){var c=card(i);if(e)ml.replaceChild(c,e);else ml.appendChild(c)}});
+ document.querySelectorAll("#ml .it").forEach(function(e){if(!ids[e.id.slice(1)])e.remove()});
+ var tot=0,h="";if(orders.length){h="<h2>Your orders</h2>";orders.forEach(function(o){tot+=sum(o.items);var p={New:33,Cooking:66,Served:100}[o.status],c={New:"var(--nw)",Cooking:"var(--wa)",Served:"var(--ok)"}[o.status];h+='<div class="card"><div class="row"><span class="mu">'+tm(o.t)+'</span><span class="tag '+o.status+'">'+o.status+'</span></div>'+o.items.map(function(i){return esc(i.n)+' × '+i.q}).join("<br>")+'<div class="pg"><i style="width:'+p+'%;background:'+c+'"></i></div></div>'});h+='<div class="card row"><b>Table total</b><b>₹'+tot+'</b></div>'}
+ $("#mo").innerHTML=h;fit();cbar();if($("#cp").classList.contains("on"))cpanel()}
 
-function customer(t){
- var h='<h1>Table '+t+'</h1><div class="mu">AV Chowdary Family Dhaba &amp; Restaurant · tap + to add items</div><input id="s" type="search" placeholder="Search menu…" value="'+esc(qs)+'" style="width:100%;margin:10px 0 0;padding:12px">';
- var lc="";MENU.forEach(function(m){if(qs&&m.name.toLowerCase().indexOf(qs.toLowerCase())<0)return;if(m.cat!==lc){lc=m.cat;h+='<h2>'+esc(lc)+'</h2>'}var q=cart[m.id]||0;h+='<div class="card row"><div><div>'+esc(m.name)+'</div><div class="mu">₹'+m.price+'</div></div><div class="q"><button class="g" data-d="-1" data-i="'+m.id+'">−</button><b>'+q+'</b><button data-d="1" data-i="'+m.id+'">+</button></div></div>'});
- if(orders.length){var tot=0;h+='<h2>Your orders</h2>';orders.forEach(function(o){tot+=sum(o.items);h+='<div class="card"><div class="row"><span class="mu">'+tm(o.t)+'</span><span class="tag '+o.status+'">'+o.status+'</span></div>'+o.items.map(function(i){return esc(i.n)+' × '+i.q}).join('<br>')+'</div>'});h+='<div class="card row"><b>Table total</b><b>₹'+tot+'</b></div>'}
- var n=0,s=0;MENU.forEach(function(m){var q=cart[m.id]||0;n+=q;s+=q*m.price});
- h+='<div class="bar"><button id="place" '+(n&&!busy?'':'disabled')+'>'+(busy?'Sending…':(n?'Place Order · '+n+' items · ₹'+s:'Add items to order'))+'</button></div>';
- var hadF=document.activeElement&&document.activeElement.id==="s";app.innerHTML=h;
- var se=document.getElementById("s");se.oninput=function(){qs=se.value;customer(t)};if(hadF){se.focus();se.setSelectionRange(qs.length,qs.length)}
- app.querySelectorAll("button[data-i]").forEach(function(b){b.onclick=function(){var i=+b.dataset.i;cart[i]=Math.max(0,(cart[i]||0)+ +b.dataset.d);customer(t)}});
- var p=document.getElementById("place");if(p)p.onclick=function(){
-  if(busy)return;busy=true;customer(t);
-  var items=Object.keys(cart).filter(function(k){return cart[k]}).map(function(k){return{id:+k,q:cart[k]}});
-  api("/api/orders","POST",{table:t,items:items}).then(function(){cart={};busy=false;refresh()}).catch(function(){busy=false;alert("Could not send. Please try again.");customer(t)})}}
+/* ---------- kitchen ---------- */
+function ocard(x){return'<div class="row"><span><b>Table '+x.table+'</b> <span class="mu">'+tm(x.t)+'</span>'+(x.waiter?' <span class="chip" style="background:'+hue(x.waiter)+'">'+esc(x.waiter)+'</span>':"")+'</span><span class="tag '+x.status+'">'+x.status+'</span></div><div style="margin:6px 0">'+x.items.map(function(i){return'<b>'+i.q+'×</b> '+esc(i.n)}).join("<br>")+'</div>'+({New:'<button data-s="'+x.id+'">Start cooking</button>',Cooking:'<button data-s="'+x.id+'">Mark served</button>'}[x.status]||"")+'<div class="pg"><i style="width:'+{New:33,Cooking:66,Served:100}[x.status]+'%;background:var(--'+{New:"nw",Cooking:"wa",Served:"ok"}[x.status]+')"></i></div>'}
+function kview(){
+ if(!$("#kl")){app.innerHTML=nav()+'<div class="hd"><img class="lg" src="/logo.png" alt="AV Chowdary logo"><div><h1>Kitchen</h1><div class="s" id="kn"></div></div></div><div id="kl"></div><h2>Bills</h2><div id="kb"></div>';
+  $("#kl").onclick=function(e){var b=e.target.closest("[data-s]");if(b)api("/api/orders/"+b.dataset.s+"/next","POST").then(refresh)};
+  $("#kb").onclick=function(e){var b=e.target.closest("[data-c]");if(b&&confirm("Close Table "+b.dataset.c+"?"))api("/api/tables/"+b.dataset.c+"/close","POST").then(refresh)}}
+ var kl=$("#kl"),o=orders.slice().sort(function(a,b){return a.table-b.table||a.t-b.t}),seen={};
+ $("#kn").textContent=orders.filter(function(x){return x.status==="New"}).length+" new · live";
+ o.forEach(function(x,n){seen["o"+x.id]=1;var e=document.getElementById("o"+x.id);
+  if(!e){e=document.createElement("div");e.id="o"+x.id;e.className="card "+(lastNew>=0?"flash":"in");e.dataset.s=x.status;e.innerHTML=ocard(x)}
+  else if(e.dataset.s!==x.status){e.dataset.s=x.status;e.innerHTML=ocard(x);e.className="card";void e.offsetWidth;e.className="card flash"}
+  if(kl.children[n]!==e)kl.insertBefore(e,kl.children[n]||null)});
+ Array.prototype.slice.call(kl.children).forEach(function(e){if(!seen[e.id])e.remove()});
+ if(!o.length&&!$("#ke"))kl.insertAdjacentHTML("afterend",'<div class="card mu" id="ke">No open orders.</div>');if(o.length&&$("#ke"))$("#ke").remove();
+ var by={};orders.forEach(function(x){by[x.table]=(by[x.table]||0)+sum(x.items)});
+ $("#kb").innerHTML=Object.keys(by).sort(function(a,b){return a-b}).map(function(k){return'<div class="card row"><b>Table '+k+' · ₹'+by[k]+'</b><button class="g" data-c="'+k+'">Paid · close</button></div>'}).join("")}
 
-function kitchen(){
- var by={};orders.forEach(function(x){(by[x.table]=by[x.table]||[]).push(x)});
- var ks=Object.keys(by).sort(function(a,b){return a-b}),nw=orders.filter(function(x){return x.status==="New"}).length;
- var h=nav()+'<h1>Kitchen</h1><div class="mu">'+nw+' new · live</div>';
- if(!ks.length)h+='<div class="card mu">No open orders.</div>';
- ks.forEach(function(k){var tot=0;h+='<h2>Table '+k+'</h2>';
-  by[k].forEach(function(x){tot+=sum(x.items);var nx={New:"Start cooking",Cooking:"Mark served"}[x.status];
-   h+='<div class="card"><div class="row"><span class="mu">'+tm(x.t)+'</span><span class="tag '+x.status+'">'+x.status+'</span></div><div style="margin:6px 0">'+x.items.map(function(i){return '<b>'+i.q+'×</b> '+esc(i.n)}).join('<br>')+'</div>'+(nx?'<button data-s="'+x.id+'">'+nx+'</button>':'')+'</div>'});
-  h+='<div class="row"><b>Bill ₹'+tot+'</b><button class="g" data-c="'+k+'">Paid · close table</button></div>'});
- app.innerHTML=h;
- app.querySelectorAll("[data-s]").forEach(function(b){b.onclick=function(){api("/api/orders/"+b.dataset.s+"/next","POST").then(refresh)}});
- app.querySelectorAll("[data-c]").forEach(function(b){b.onclick=function(){if(confirm("Close Table "+b.dataset.c+"?"))api("/api/tables/"+b.dataset.c+"/close","POST").then(refresh)}})}
+/* ---------- QR ---------- */
+function qrs(){var n=+localStorage.getItem("nt")||10,base=location.origin+"/";
+ app.innerHTML=nav()+'<h1>Table QR codes</h1><div class="noprint card row"><span>Number of tables</span><input type="number" id="nt" min="1" max="60" value="'+n+'" style="width:80px"></div><button class="noprint" onclick="window.print()">Print</button><div class="grid" id="g" style="margin-top:12px"></div>';
+ var g=$("#g");for(var i=1;i<=n;i++){var c=document.createElement("div");c.className="card qr";c.innerHTML="<img class='lg' src='/logo.png' alt=''><br><b>Table "+i+"</b><div></div><span class='mu'>Scan to order</span>";g.appendChild(c);try{new QRCode(c.querySelector("div"),{text:base+"#table-"+i,width:130,height:130})}catch(e){}}
+ $("#nt").onchange=function(e){localStorage.setItem("nt",Math.max(1,Math.min(60,+e.target.value||10)));qrs()}}
 
-function qrs(){
- var n=+localStorage.getItem("nt")||10,base=location.origin+"/";
- app.innerHTML=nav()+'<h1>Table QR codes</h1><div class="noprint card row"><span>Number of tables</span><input type="number" id="nt" min="1" max="60" value="'+n+'"></div><button class="noprint" onclick="window.print()">Print</button><div class="grid" id="g" style="margin-top:12px"></div>';
- var g=document.getElementById("g");
- for(var i=1;i<=n;i++){var c=document.createElement("div");c.className="card qr";c.innerHTML="<b>Table "+i+"</b><div></div><span class='mu'>Scan to order</span>";g.appendChild(c);
-  try{new QRCode(c.querySelector("div"),{text:base+"#table-"+i,width:130,height:130})}catch(e){}}
- document.getElementById("nt").onchange=function(e){localStorage.setItem("nt",Math.max(1,Math.min(60,+e.target.value||10)));qrs()}}
+/* ---------- admin ---------- */
+function shrink(f,cb){var im=new Image();im.onload=function(){var s=480,q=.8,d;for(var k=0;k<10;k++){var sc=Math.min(1,s/Math.max(im.width,im.height)),c=document.createElement("canvas");c.width=im.width*sc;c.height=im.height*sc;c.getContext("2d").drawImage(im,0,0,c.width,c.height);d=c.toDataURL("image/jpeg",q);if(d.length<80000)break;q-=.1;if(q<.4){q=.7;s-=80}}cb(d)};im.src=URL.createObjectURL(f)}
+function A(u,m,b){return api(u,m,b,"apin")}
+function admin(){ask("apin","Admin PIN");A("/api/admin/state").then(function(s){AD=s;aview()}).catch(function(e){app.innerHTML=nav()+'<div class="card">'+(e.message==="pin"?"Wrong PIN. <button onclick=\"admin()\">Try again</button>":"Admin is disabled: set the ADMIN_PIN environment variable on the server.")+'</div>'})}
+function aview(){var s=AD,h=nav()+'<div class="hd"><img class="lg" src="/logo.png" alt="AV Chowdary logo"><div><h1>Admin</h1></div></div><div class="ad">';
+ h+='<h2>Prices: bulk change</h2><div class="card"><div class="r"><select id="bd"><option value="up">Increase</option><option value="down">Decrease</option></select><input type="number" id="ba" value="10" min="1"><select id="bm"><option value="pct">%</option><option value="rs">₹</option></select></div><div class="r"><select id="bc"><option value="">All items</option>'+s.cats.map(function(c){return"<option>"+esc(c)+"</option>"}).join("")+'</select><select id="br"><option value="1">Round ₹1</option><option value="5">Round ₹5</option><option value="10">Round ₹10</option></select><button id="bp">Preview</button></div><div id="bv"></div></div>';
+ h+='<h2>Add item</h2><div class="card"><input type="text" id="nn" placeholder="Name"><input type="text" id="nc" list="cl" placeholder="Category"><datalist id="cl">'+s.cats.map(function(c){return'<option value="'+esc(c)+'">'}).join("")+'</datalist><div class="r"><input type="number" id="np" placeholder="Price ₹"><label><input type="checkbox" id="nv" checked> Veg</label><button id="na">Add</button></div></div>';
+ h+='<h2>Items</h2>';s.cats.forEach(function(c){var its=s.items.filter(function(i){return i.cat===c});if(!its.length)return;h+='<div class="row"><h2>'+icon(c)+" "+esc(c)+'</h2><button class="g" data-rc="'+esc(c)+'">Rename</button></div>';
+  its.forEach(function(i){h+='<div class="card" data-id="'+i.id+'"><div class="r"><input type="text" data-f="name" value="'+esc(i.name)+'" style="flex:1;min-width:140px"><input type="number" data-f="price" value="'+i.price+'"></div><div class="r"><input type="text" data-f="cat" list="cl" value="'+esc(i.cat)+'" style="width:150px"><label><input type="checkbox" data-f="veg" '+(i.veg?"checked":"")+'> Veg</label><label><input type="checkbox" data-f="out" '+(i.out?"checked":"")+'> Out of stock</label><label><input type="checkbox" data-f="hide" '+(i.hide?"checked":"")+'> Hidden</label></div><div class="r"><div class="im" style="width:44px;height:44px;font-size:20px">'+(i.img?'<img src="/img/'+i.id+'?v='+i.img+'" alt="">':icon(i.cat))+'</div><input type="file" accept="image/*" data-img="'+i.id+'" style="flex:1"><button class="g" data-del="'+i.id+'">Delete</button></div></div>'})});
+ h+='<h2>Waiters</h2><div class="card"><div class="r"><input type="text" id="wn" placeholder="New waiter name"><button id="wa">Add</button></div>'+s.waiters.map(function(w){return'<div class="row"><span class="chip" style="background:'+hue(w)+'">'+esc(w)+'</span><span><button class="g" data-wr="'+esc(w)+'">Rename</button> <button class="g" data-wd="'+esc(w)+'">Remove</button></span></div>'}).join("")+'</div><h2>Tables → waiter</h2><div class="card"><table>';
+ for(var t=1;t<=(+localStorage.getItem("nt")||10);t++)h+='<tr><td>Table '+t+'</td><td><select data-tm="'+t+'"><option value="">—</option>'+s.waiters.map(function(w){return"<option"+(s.tmap[t]===w?" selected":"")+">"+esc(w)+"</option>"}).join("")+'</select></td></tr>';
+ app.innerHTML=h+'</table></div></div>';var R=function(){return A("/api/admin/state").then(function(x){AD=x;aview()})},ac=$(".ad");
+ var bulk=function(ap){return A("/api/admin/bulk","POST",{dir:$("#bd").value,amount:$("#ba").value,mode:$("#bm").value,cat:$("#bc").value,round:$("#br").value,apply:ap})};
+ $("#bp").onclick=function(){bulk(false).then(function(l){$("#bv").innerHTML='<table>'+l.map(function(x){return"<tr><td>"+esc(x.name)+"</td><td>₹"+x.old+" → <b>₹"+x.nw+"</b></td></tr>"}).join("")+'</table><button id="bk">Confirm &amp; apply</button>';$("#bk").onclick=function(){bulk(true).then(R)}}).catch(function(){alert("Check the amount")})};
+ $("#na").onclick=function(){A("/api/admin/item","POST",{name:$("#nn").value,cat:$("#nc").value,price:$("#np").value,veg:$("#nv").checked}).then(R).catch(function(){alert("Fill name, category and price")})};
+ ac.onchange=function(e){var el=e.target,c=el.closest("[data-id]");
+  if(el.dataset.img)return shrink(el.files[0],function(d){A("/api/admin/img/"+el.dataset.img,"POST",{data:d}).then(R).catch(function(){alert("Image too large")})});
+  if(el.dataset.tm)return A("/api/admin/tmap","POST",{table:el.dataset.tm,waiter:el.value}).catch(function(){alert("Failed")});
+  if(!c)return;var b={id:c.dataset.id};c.querySelectorAll("[data-f]").forEach(function(f){b[f.dataset.f]=f.type==="checkbox"?f.checked:f.value});A("/api/admin/item","POST",b).then(R).catch(function(){alert("Invalid value")})};
+ ac.onclick=function(e){var b=e.target.closest("button"),d=b&&b.dataset;if(!d)return;
+  if(d.del&&confirm("Delete this item?"))A("/api/admin/item/"+d.del,"DELETE").then(R);
+  if(d.rc){var n=prompt("Rename category",d.rc);if(n)A("/api/admin/cat","POST",{from:d.rc,to:n}).then(R)}
+  if(d.wr){var n2=prompt("Rename waiter",d.wr);if(n2)A("/api/admin/waiters","POST",{rename:{from:d.wr,to:n2}}).then(R)}
+  if(d.wd&&confirm("Remove "+d.wd+"?"))A("/api/admin/waiters","POST",{waiters:AD.waiters.filter(function(w){return w!==d.wd})}).then(R);
+  if(b.id==="wa"&&$("#wn").value)A("/api/admin/waiters","POST",{waiters:AD.waiters.concat($("#wn").value)}).then(R)}}
 
-window.addEventListener("hashchange",function(){orders=[];lastNew=-1;refresh()});
-fetch("/api/menu").then(function(r){return r.json()}).then(function(m){MENU=m;refresh()});
-try{var es=new EventSource("/api/events");es.onmessage=function(){if(!busy)refresh()}}catch(e){}
-setInterval(function(){if(!busy)refresh()},20000);
+window.addEventListener("hashchange",function(){orders=[];lastNew=-1;T=0;refresh()});
+refresh();
+try{var es=new EventSource("/api/events");es.onmessage=function(){if(!busy&&route().v!=="admin"&&route().v!=="qr")refresh()}}catch(e){}
+setInterval(function(){if(!busy&&["c","kitchen"].indexOf(route().v)>=0)refresh()},20000);
 </script></body></html>

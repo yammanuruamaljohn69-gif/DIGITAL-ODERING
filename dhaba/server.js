@@ -1,10 +1,10 @@
 const express=require('express'),fs=require('fs'),path=require('path'),crypto=require('crypto');
 const app=express();app.set('trust proxy',1);app.use(express.json({limit:'400kb'}));
-const KP=process.env.KITCHEN_PIN||'1234',AP=process.env.ADMIN_PIN;           // ADMIN_PIN unset => admin refuses to work
+const AP=process.env.ADMIN_PIN;                                                  // one PIN for admin AND kitchen; unset => both refuse to work
 const DB=process.env.DB_FILE||path.join(__dirname,'orders.json'),SF=DB.replace(/\.json$/,'')+'.state.json';
 const hs=s=>crypto.createHash('sha256').update(String(s||'')).digest(),eq=(a,b)=>!!b&&crypto.timingSafeEqual(hs(a),hs(b));
-const kauth=(q,r,n)=>eq(q.get('x-pin'),KP)?n():r.status(401).json({error:'pin'});
 const aauth=(q,r,n)=>!AP?r.status(503).json({error:'ADMIN_PIN not set'}):eq(q.get('x-pin'),AP)?n():r.status(401).json({error:'pin'});
+const kauth=aauth;                                                             // kitchen uses the admin PIN now
 const pool=process.env.DATABASE_URL?new (require('pg').Pool)({connectionString:process.env.DATABASE_URL,ssl:{rejectUnauthorized:false},max:3}):null;
 const st={};                                                                    // per-key serialized saves (Postgres) or file writes
 function put(k,fn,file){if(!pool)return fs.writeFile(file,JSON.stringify(fn()),()=>{});
@@ -88,7 +88,7 @@ async function init(){
   if(!(S.tables>=1)){S.tables=10;saveS()}                                       // older saved menus have no table count yet
   IM=(await get('img',SF+'.img'))||{};
   console.log('Loaded '+orders.length+' orders, '+S.menu.length+' menu items');
-  if(!AP)console.log('ADMIN_PIN not set: admin panel disabled');
+  if(!AP)console.log('ADMIN_PIN not set: admin and kitchen are disabled');
   app.listen(process.env.PORT||3000,()=>console.log('Dhaba orders running on port '+(process.env.PORT||3000)));
   // Keep-alive: Render sets RENDER_EXTERNAL_URL. Ping our own public URL every 10 min so the free plan is less likely to sleep.
   // Set KEEPALIVE=off to disable. An outside monitor (UptimeRobot) is still the more reliable option.

@@ -103,7 +103,7 @@ function qrs(){var n=+localStorage.getItem("nt")||10,base=location.origin+"/";
  $("#nt").onchange=function(e){localStorage.setItem("nt",Math.max(1,Math.min(60,+e.target.value||10)));qrs()}}
 
 /* ---------- admin ---------- */
-function shrink(f,cb){var im=new Image();im.onload=function(){var s=480,q=.8,d;for(var k=0;k<10;k++){var sc=Math.min(1,s/Math.max(im.width,im.height)),c=document.createElement("canvas");c.width=im.width*sc;c.height=im.height*sc;c.getContext("2d").drawImage(im,0,0,c.width,c.height);d=c.toDataURL("image/jpeg",q);if(d.length<80000)break;q-=.1;if(q<.4){q=.7;s-=80}}cb(d)};im.src=URL.createObjectURL(f)}
+function shrink(f,cb){var im=new Image();im.onload=function(){var s=480,q=.8,d;for(var k=0;k<10;k++){var sc=Math.min(1,s/Math.max(im.width,im.height)),c=document.createElement("canvas");c.width=im.width*sc;c.height=im.height*sc;c.getContext("2d").drawImage(im,0,0,c.width,c.height);d=c.toDataURL("image/jpeg",q);if(d.length<80000)break;q-=.1;if(q<.4){q=.7;s-=80}}cb(d)};im.onerror=function(){cb(null)};im.src=URL.createObjectURL(f)}
 function A(u,m,b){return api(u,m,b,"apin")}
 function admin(){ask("apin","Admin PIN");A("/api/admin/state").then(function(s){AD=s;aview()}).catch(function(e){app.innerHTML=nav()+'<div class="card">'+(e.message==="pin"?"Wrong PIN. <button onclick=\"admin()\">Try again</button>":"Admin is disabled: set the ADMIN_PIN environment variable on the server.")+'</div>'})}
 function aview(){var s=AD,h=nav()+'<div class="hd"><img class="lg" src="/logo.png" alt="AV Chowdary logo"><div><h1>Admin</h1></div></div><div class="ad">';
@@ -123,9 +123,9 @@ function aview(){var s=AD,h=nav()+'<div class="hd"><img class="lg" src="/logo.pn
    var f=fs[i++],n=nz(f.name.replace(/\.[^.]+$/,"")),it=AD.items.find(function(x){return nz(x.name)===n});
    $("#bs").textContent="Uploading "+i+" of "+fs.length+"…";
    if(!it){miss.push(f.name);return nx()}
-   shrink(f,function(d){A("/api/admin/img/"+it.id,"POST",{data:d}).then(function(){ok++}).catch(function(){miss.push(f.name+" (failed)")}).then(nx)})})()};
+   shrink(f,function(d){if(!d){miss.push(f.name+" (unreadable)");return nx()}A("/api/admin/img/"+it.id,"POST",{data:d}).then(function(){ok++}).catch(function(){miss.push(f.name+" (failed)")}).then(nx)})})()};
  ac.onchange=function(e){var el=e.target,c=el.closest("[data-id]");
-  if(el.dataset.img)return shrink(el.files[0],function(d){A("/api/admin/img/"+el.dataset.img,"POST",{data:d}).then(R).catch(function(){alert("Image too large")})});
+  if(el.dataset.img)return shrink(el.files[0],function(d){if(!d)return alert("This photo cannot be read. Please use a JPG or PNG photo.");A("/api/admin/img/"+el.dataset.img,"POST",{data:d}).then(R).catch(function(){alert("Image too large")})});
   if(el.dataset.tm)return A("/api/admin/tmap","POST",{table:el.dataset.tm,waiter:el.value}).catch(function(){alert("Failed")});
   if(!c)return;var b={id:c.dataset.id};c.querySelectorAll("[data-f]").forEach(function(f){b[f.dataset.f]=f.type==="checkbox"?f.checked:f.value});A("/api/admin/item","POST",b).then(R).catch(function(){alert("Invalid value")})};
  ac.onclick=function(e){var b=e.target.closest("button"),d=b&&b.dataset;if(!d)return;
